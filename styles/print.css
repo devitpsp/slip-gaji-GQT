@@ -1,0 +1,57 @@
+@media print {
+  @page {
+    size: A5 portrait;
+    margin: 0;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  .slip-print-area,
+  .slip-print-area *,
+  .print-all-area,
+  .print-all-area * {
+    visibility: visible;
+  }
+
+  .modal-backdrop,
+  .modal-panel,
+  .modal-body {
+    position: static;
+    display: block;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+    background: #fff;
+    box-shadow: none;
+  }
+
+  .modal-header,
+  .no-print {
+    display: none !important;
+  }
+
+  .slip-print-area,
+  .print-all-area {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 148mm;
+  }
+
+  .slip-paper {
+    width: 148mm;
+    min-height: 210mm;
+    padding: 10mm;
+    border: 0;
+    box-shadow: none;
+    break-after: page;
+    page-break-after: always;
+  }
+
+  .slip-signature {
+    min-height: 142px;
+  }
+}
