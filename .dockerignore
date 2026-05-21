@@ -1,0 +1,14 @@
+node_modules
+.next
+.git
+data
+tasks
+coverage
+dist
+build
+.env
+.env.local
+.env.production
+npm-debug.log*
+Dockerfile
+docker-compose.yml

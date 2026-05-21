@@ -1,0 +1,12 @@
+services:
+  slip-gaji:
+    build: .
+    container_name: slip-gaji-tartila
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - slip_gaji_data:/app/data
+
+volumes:
+  slip_gaji_data:

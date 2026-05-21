@@ -11,6 +11,7 @@ interface SlipPreviewProps {
 
 export function SlipPreview({ data, settings, tanggalTtd }: SlipPreviewProps) {
   const calculated = calculateSlip(data)
+  const logoSrc = settings.logo_data_url || '/GQT-icon.png'
 
   return (
     <article className="slip-paper">
@@ -18,16 +19,14 @@ export function SlipPreview({ data, settings, tanggalTtd }: SlipPreviewProps) {
       <div className="slip-subtitle">Periode: {data.periode_lengkap}</div>
 
       <section className="slip-section">
-        <div className="slip-grid">
+        <div className="slip-identity">
           <div className="slip-info">
             <div>No&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {data.no}</div>
             <div>Nama&nbsp;&nbsp;&nbsp;&nbsp;: {data.nama}</div>
             <div>Kampus&nbsp;&nbsp;: {settings.kampus}</div>
             <div>Periode : {data.periode}</div>
           </div>
-          <div className="slip-logo">
-            {settings.logo_data_url ? <img src={settings.logo_data_url} alt="Logo institusi" /> : <span>LOGO</span>}
-          </div>
+          <img className="slip-logo" src={logoSrc} alt="Logo institusi" />
         </div>
       </section>
 

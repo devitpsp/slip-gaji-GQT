@@ -8,22 +8,21 @@ interface SlipPdfDocumentProps {
   data: SlipData | SlipData[]
   settings: AppSettings
   tanggalTtd?: string
-  logoSource?: string
 }
 
-export function SlipPdfDocument({ data, settings, tanggalTtd, logoSource }: SlipPdfDocumentProps) {
+export function SlipPdfDocument({ data, settings, tanggalTtd }: SlipPdfDocumentProps) {
   const slips = Array.isArray(data) ? data : [data]
 
   return (
     <Document>
       {slips.map((slip) => (
-        <SlipPdfPage key={`${slip.no}-${slip.nama}`} data={slip} settings={settings} tanggalTtd={tanggalTtd} logoSource={logoSource} />
+        <SlipPdfPage key={`${slip.no}-${slip.nama}`} data={slip} settings={settings} tanggalTtd={tanggalTtd} />
       ))}
     </Document>
   )
 }
 
-function SlipPdfPage({ data, settings, tanggalTtd, logoSource }: { data: SlipData; settings: AppSettings; tanggalTtd?: string; logoSource?: string }) {
+function SlipPdfPage({ data, settings, tanggalTtd }: { data: SlipData; settings: AppSettings; tanggalTtd?: string }) {
   const calculated = calculateSlip(data)
 
   return (
@@ -32,14 +31,14 @@ function SlipPdfPage({ data, settings, tanggalTtd, logoSource }: { data: SlipDat
       <Text style={styles.subtitle}>Periode: {data.periode_lengkap}</Text>
 
       <View style={styles.box}>
-        <View style={styles.topGrid}>
+        <View style={styles.identity}>
           <View style={styles.info}>
             <Text>No      : {data.no}</Text>
             <Text>Nama    : {data.nama}</Text>
             <Text>Kampus  : {settings.kampus}</Text>
             <Text>Periode : {data.periode}</Text>
           </View>
-          <View style={styles.logo}>{logoSource ? <Image src={logoSource} style={styles.logoImage} /> : <Text>LOGO</Text>}</View>
+          {settings.logo_data_url ? <Image src={settings.logo_data_url} style={styles.logo} /> : null}
         </View>
       </View>
 
@@ -86,10 +85,9 @@ const styles = StyleSheet.create({
   title: { textAlign: 'center', fontSize: 15, fontWeight: 700 },
   subtitle: { marginTop: 4, textAlign: 'center', fontSize: 10 },
   box: { marginTop: 12, border: '1px solid #111827' },
-  topGrid: { flexDirection: 'row' },
-  info: { flex: 1, padding: 10, gap: 5 },
-  logo: { width: 82, borderLeft: '1px solid #111827', alignItems: 'center', justifyContent: 'center', color: '#9CA3AF' },
-  logoImage: { width: 56, height: 56, objectFit: 'contain' },
+  identity: { padding: 10, flexDirection: 'row', alignItems: 'center', gap: 12 },
+  logo: { width: 60, height: 60, objectFit: 'contain' },
+  info: { gap: 5, flex: 1 },
   row: { padding: 7, borderBottom: '1px solid #111827' },
   rowView: { padding: 7, borderTop: '1px solid #111827', flexDirection: 'row', justifyContent: 'space-between', gap: 16 },
   center: { textAlign: 'center', fontWeight: 700 },

@@ -1,7 +1,8 @@
 'use client'
 
+import Image from 'next/image'
 import { Save } from 'lucide-react'
-import { FormEvent, useEffect, useState } from 'react'
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { PageHeader } from '@/components/PageHeader'
 import { DEFAULT_SETTINGS } from '@/lib/settings'
 import type { AppSettings } from '@/lib/types'
@@ -22,6 +23,17 @@ export default function SettingsPage() {
     loadSettings()
   }, [])
 
+  function handleLogoChange(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    const reader = new FileReader()
+    reader.onload = () => {
+      setSettings((current) => ({ ...current, logo_data_url: String(reader.result) }))
+    }
+    reader.readAsDataURL(file)
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
@@ -38,16 +50,6 @@ export default function SettingsPage() {
     window.setTimeout(() => setSaved(false), 2500)
   }
 
-  function handleLogoUpload(file: File | undefined) {
-    if (!file) return
-
-    const reader = new FileReader()
-    reader.onload = () => {
-      setSettings({ ...settings, logo_data_url: String(reader.result) })
-    }
-    reader.readAsDataURL(file)
-  }
-
   return (
     <div className="stack">
       <PageHeader title="Pengaturan Institusi" description="Data ini dipakai pada semua slip gaji yang digenerate." />
@@ -62,14 +64,15 @@ export default function SettingsPage() {
 
           <div className="form-field">
             <label>Logo Institusi</label>
-            <input type="file" accept="image/png,image/jpeg" onChange={(event) => handleLogoUpload(event.target.files?.[0])} />
-            <small>Logo disimpan di browser bersama pengaturan. Gunakan PNG/JPG ukuran kecil agar masuk ke PDF.</small>
+            <input type="file" accept="image/png,image/jpeg,image/webp" onChange={handleLogoChange} />
             {settings.logo_data_url ? (
               <div className="settings-logo-preview">
-                <img src={settings.logo_data_url} alt="Preview logo institusi" />
+                <Image src={settings.logo_data_url} alt="Logo institusi" width={72} height={72} unoptimized />
                 <button className="button" type="button" onClick={() => setSettings({ ...settings, logo_data_url: '' })}>Hapus Logo</button>
               </div>
-            ) : null}
+            ) : (
+              <small>Logo belum dipilih.</small>
+            )}
           </div>
 
           <div className="actions">
