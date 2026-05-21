@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Download } from 'lucide-react'
+import { Download, Printer } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { EmployeeList } from '@/components/EmployeeList'
 import { PageHeader } from '@/components/PageHeader'
@@ -85,6 +85,17 @@ export default function HomePage() {
     downloadBlob(blob, `SlipGaji_${safeFileName(slip.nama)}_${safeFileName(slip.periode)}.pdf`)
   }
 
+  function handlePrintAll() {
+    if (data.length === 0) return
+
+    if (!settingsComplete || !settings) {
+      setError('Pengaturan institusi belum diisi. Lengkapi di menu Settings sebelum membuat slip.')
+      return
+    }
+
+    window.print()
+  }
+
   async function handleDownloadAllPdf() {
     if (data.length === 0) return
 
@@ -122,9 +133,14 @@ export default function HomePage() {
         description="Upload Excel, preview slip A5, lalu print atau download PDF."
         actions={
           data.length > 0 ? (
-            <button className="button button--primary" type="button" onClick={handleDownloadAllPdf} disabled={isDownloading || !settingsComplete}>
-              <Download size={16} /> {isDownloading ? 'Membuat PDF...' : 'Download Semua PDF'}
-            </button>
+            <div className="actions">
+              <button className="button" type="button" onClick={handlePrintAll} disabled={!settingsComplete}>
+                <Printer size={16} /> Print Semua
+              </button>
+              <button className="button button--primary" type="button" onClick={handleDownloadAllPdf} disabled={isDownloading || !settingsComplete}>
+                <Download size={16} /> {isDownloading ? 'Membuat PDF...' : 'Download Semua PDF'}
+              </button>
+            </div>
           ) : null
         }
       />

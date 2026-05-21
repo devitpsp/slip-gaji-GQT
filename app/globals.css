@@ -98,8 +98,26 @@ tr:hover td { background: var(--color-bg-subtle); }
 .slip-row:first-child { border-top: 0; }
 .slip-row--center { display: block; text-align: center; font-weight: 700; }
 .slip-row--total { font-size: 16px; font-weight: 800; border-top: 2px solid #111827; }
-.slip-signature { padding: 18px 10px 14px; min-height: 142px; display: grid; align-content: space-between; }
+.slip-signature { padding: 18px 10px 14px; min-height: 142px; display: grid; align-content: start; gap: 52px; }
+.slip-signature__name { display: grid; gap: 2px; }
 .print-all-area { display: none; }
+
+@media print {
+  @page { size: A5 portrait; margin: 0; }
+  body { background: #fff; }
+  body * { visibility: hidden; }
+  .modal-backdrop { position: static; display: block; padding: 0; background: transparent; }
+  .modal-panel { width: auto; max-height: none; overflow: visible; border-radius: 0; box-shadow: none; }
+  .slip-print-area, .slip-print-area * { visibility: visible; }
+  .slip-print-area { position: absolute; inset: 0 auto auto 0; }
+  .print-all-area { display: block; position: absolute; inset: 0 auto auto 0; }
+  .print-all-area, .print-all-area * { visibility: visible; }
+  .print-all-area .slip-paper { break-after: page; page-break-after: always; }
+  .print-all-area .slip-paper:last-child { break-after: auto; page-break-after: auto; }
+  .slip-paper { width: 148mm; min-height: 210mm; margin: 0; border: 0; box-shadow: none; }
+  .slip-signature { min-height: 170px; }
+  .no-print { display: none !important; }
+}
 
 @media (max-width: 760px) {
   .main-content { padding: 20px 14px 36px; }

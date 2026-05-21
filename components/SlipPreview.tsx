@@ -46,7 +46,7 @@ export function SlipPreview({ data, settings, tanggalTtd }: SlipPreviewProps) {
           <div>Mengetahui,</div>
           <div>{settings.kota_ttd}, {tanggalTtd ?? getTanggalTtd()}</div>
         </div>
-        <div>
+        <div className="slip-signature__name">
           <strong>{settings.nama_bendahara}</strong>
           <div>{settings.jabatan_bendahara}</div>
         </div>

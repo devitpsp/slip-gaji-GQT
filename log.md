@@ -13,3 +13,7 @@
 [2026-05-21 11:19] [slip-gaji-tartila] Restore configurable logo → Settings logo upload restored and rendered in slip preview/PDF; build passed
 [2026-05-21 12:38] [slip-gaji-tartila] Fix slip logo placement → Default/custom logo now appears inside identity box beside No/Nama/Kampus/Periode in preview and PDF; build passed
 [2026-05-21 12:53] [slip-gaji-tartila] Align slip identity with PRD → Info text stays left and logo appears right inside identity box in preview/PDF; build passed
+[2026-05-21 12:58] [slip-gaji-tartila] Add global print action → Print Semua button added for all generated slips with A5 print CSS; build passed
+[2026-05-21 13:02] [slip-gaji-tartila] Adjust print signature spacing → Increased signature area height for direct browser print; build passed
+[2026-05-21 13:05] [slip-gaji-tartila] Adjust preview signature spacing → Increased Bendahara GQT top spacing in slip preview
+[2026-05-21 13:08] [slip-gaji-tartila] Fix preview signature spacing CSS → Replaced ineffective Tailwind utility with custom slip-signature CSS gap

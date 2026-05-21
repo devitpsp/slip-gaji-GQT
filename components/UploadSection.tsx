@@ -38,7 +38,7 @@ export function UploadSection({ isLoading, error, onFile }: UploadSectionProps) 
 
         <div className="actions">
           <a className="button" href="/template-slip-gaji.xlsx" download>
-            <Download size={16} /> Download Template
+            <Download size={16} /> Download Template Slip Gaji
           </a>
         </div>
       </div>
