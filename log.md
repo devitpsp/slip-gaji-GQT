@@ -17,3 +17,4 @@
 [2026-05-21 13:02] [slip-gaji-tartila] Adjust print signature spacing → Increased signature area height for direct browser print; build passed
 [2026-05-21 13:05] [slip-gaji-tartila] Adjust preview signature spacing → Increased Bendahara GQT top spacing in slip preview
 [2026-05-21 13:08] [slip-gaji-tartila] Fix preview signature spacing CSS → Replaced ineffective Tailwind utility with custom slip-signature CSS gap
+[2026-05-25 10:38] [slip-gaji-tartila] Add README documentation → Created README with usage, commands, API routes, and data/settings.json database notes
