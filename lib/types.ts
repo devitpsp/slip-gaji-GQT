@@ -1,6 +1,7 @@
 export interface SlipData {
   no: number
   nama: string
+  phone_number: string
   periode: string
   periode_lengkap: string
   transport_per_datang: number
@@ -21,6 +22,7 @@ export interface AppSettings {
   nama_bendahara: string
   jabatan_bendahara: string
   kampus: string
+  whatsapp_message: string
   logo_data_url?: string
 }
 

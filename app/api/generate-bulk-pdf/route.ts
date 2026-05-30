@@ -1,9 +1,8 @@
-import { readFile } from 'node:fs/promises'
-import { join } from 'node:path'
-import { pdf } from '@react-pdf/renderer'
 import { NextResponse } from 'next/server'
-import { SlipPdfDocument } from '@/components/SlipPdfDocument'
+import { slipPdfFileName } from '@/lib/fileName'
+import { renderSlipPdf } from '@/lib/pdfRender'
 import type { AppSettings, SlipData } from '@/lib/types'
+import { createZip } from '@/lib/zip'
 
 interface GenerateBulkPdfBody {
   slips: SlipData[]
@@ -19,28 +18,32 @@ export async function POST(request: Request): Promise<Response> {
       return NextResponse.json({ success: false, error: 'Data slip dan settings wajib dikirim.' }, { status: 400 })
     }
 
-    const document = SlipPdfDocument({
-      data: body.slips,
-      settings: await withDefaultLogo(body.settings),
-      tanggalTtd: body.tanggal_ttd,
-    })
-    const blob = await pdf(document).toBlob()
-    const arrayBuffer = await blob.arrayBuffer()
+    const usedFileNames = new Map<string, number>()
+    const files: Array<{ name: string; data: ArrayBuffer }> = []
 
-    return new Response(arrayBuffer, {
+    for (const slip of body.slips) {
+      const arrayBuffer = await renderSlipPdf(slip, body.settings, body.tanggal_ttd)
+      files.push({ name: uniqueFileName(slipPdfFileName(slip), usedFileNames), data: arrayBuffer })
+    }
+
+    const zipBuffer = createZip(files)
+
+    return new Response(zipBuffer.buffer as ArrayBuffer, {
       headers: {
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': 'attachment; filename="SlipGaji_Semua.pdf"',
+        'Content-Type': 'application/zip',
+        'Content-Disposition': 'attachment; filename="SlipGaji_Semua.zip"',
       },
     })
   } catch {
-    return NextResponse.json({ success: false, error: 'Gagal membuat PDF semua slip.' }, { status: 500 })
+    return NextResponse.json({ success: false, error: 'Gagal membuat ZIP semua slip.' }, { status: 500 })
   }
 }
 
-async function withDefaultLogo(settings: AppSettings): Promise<AppSettings> {
-  if (settings.logo_data_url) return settings
+function uniqueFileName(fileName: string, usedFileNames: Map<string, number>): string {
+  const count = usedFileNames.get(fileName) ?? 0
+  usedFileNames.set(fileName, count + 1)
 
-  const logo = await readFile(join(process.cwd(), 'public', 'GQT-icon.png'))
-  return { ...settings, logo_data_url: `data:image/png;base64,${logo.toString('base64')}` }
+  if (count === 0) return fileName
+
+  return fileName.replace(/\.pdf$/i, `_${count + 1}.pdf`)
 }

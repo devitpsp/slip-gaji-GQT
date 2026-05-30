@@ -8,6 +8,7 @@ import { PageHeader } from '@/components/PageHeader'
 import { SlipPreview } from '@/components/SlipPreview'
 import { SlipPreviewModal } from '@/components/SlipPreviewModal'
 import { UploadSection } from '@/components/UploadSection'
+import { slipPdfFileName } from '@/lib/fileName'
 import { getTanggalTtd, isSettingsComplete } from '@/lib/settings'
 import type { AppSettings, ParseExcelResponse, SlipData } from '@/lib/types'
 
@@ -82,7 +83,7 @@ export default function HomePage() {
     const blob = await downloadPdf(slip)
     if (!blob) return
 
-    downloadBlob(blob, `SlipGaji_${safeFileName(slip.nama)}_${safeFileName(slip.periode)}.pdf`)
+    downloadBlob(blob, slipPdfFileName(slip))
   }
 
   function handlePrintAll() {
@@ -115,12 +116,12 @@ export default function HomePage() {
       })
 
       if (!response.ok) {
-        setError('Gagal membuat PDF semua slip.')
+        setError('Gagal membuat ZIP semua slip.')
         return
       }
 
       const blob = await response.blob()
-      downloadBlob(blob, 'SlipGaji_Semua.pdf')
+      downloadBlob(blob, 'SlipGaji_Semua.zip')
     } finally {
       setIsDownloading(false)
     }
@@ -138,12 +139,31 @@ export default function HomePage() {
                 <Printer size={16} /> Print Semua
               </button>
               <button className="button button--primary" type="button" onClick={handleDownloadAllPdf} disabled={isDownloading || !settingsComplete}>
-                <Download size={16} /> {isDownloading ? 'Membuat PDF...' : 'Download Semua PDF'}
+                <Download size={16} /> {isDownloading ? 'Membuat ZIP...' : 'Download Semua PDF (.zip)'}
               </button>
             </div>
           ) : null
         }
       />
+
+      <div className="workflow no-print" aria-label="Status alur kerja">
+        <div className={`workflow__step ${settingsComplete ? 'workflow__step--done' : 'workflow__step--active'}`}>
+          <strong>1. Settings</strong>
+          <span>{settingsComplete ? 'Pengaturan siap dipakai.' : 'Lengkapi data institusi dulu.'}</span>
+        </div>
+        <div className={`workflow__step ${data.length > 0 ? 'workflow__step--done' : settingsComplete ? 'workflow__step--active' : ''}`}>
+          <strong>2. Upload Excel</strong>
+          <span>{data.length > 0 ? `${data.length} karyawan terbaca.` : 'Upload file sesuai template.'}</span>
+        </div>
+        <div className={`workflow__step ${selectedIndex !== null ? 'workflow__step--done' : data.length > 0 ? 'workflow__step--active' : ''}`}>
+          <strong>3. Review</strong>
+          <span>{data.length > 0 ? 'Cek data dan preview slip.' : 'Menunggu data karyawan.'}</span>
+        </div>
+        <div className={`workflow__step ${data.length > 0 && settingsComplete ? 'workflow__step--active' : ''}`}>
+          <strong>4. Export</strong>
+          <span>{data.length > 0 && settingsComplete ? 'Print, PDF, ZIP, dan WhatsApp siap.' : 'Siap setelah data valid.'}</span>
+        </div>
+      </div>
 
       {!settingsComplete ? (
         <div className="alert alert--warning no-print">
@@ -152,7 +172,7 @@ export default function HomePage() {
       ) : null}
 
       <UploadSection isLoading={isLoading} error={error} onFile={handleFile} />
-      <EmployeeList data={data} onPreview={setSelectedIndex} />
+      <EmployeeList data={data} settings={settings} tanggalTtd={getTanggalTtd()} onPreview={setSelectedIndex} onError={setError} />
 
       {selectedIndex !== null && settingsComplete && settings ? (
         <SlipPreviewModal data={data} selectedIndex={selectedIndex} settings={settings} onClose={() => setSelectedIndex(null)} onSelect={setSelectedIndex} onDownloadPdf={handleDownloadPdf} />
@@ -174,8 +194,4 @@ function downloadBlob(blob: Blob, fileName: string) {
   link.download = fileName
   link.click()
   URL.revokeObjectURL(url)
-}
-
-function safeFileName(value: string): string {
-  return value.replace(/[^a-z0-9-_]+/gi, '_')
 }

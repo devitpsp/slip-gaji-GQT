@@ -31,7 +31,7 @@ export function SlipPreviewModal({ data, selectedIndex, settings, onClose, onSel
   if (!slip) return null
 
   return (
-    <div className="modal-backdrop" role="dialog" aria-modal="true">
+    <div className="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="preview-modal-title">
       <div className="modal-panel">
         <div className="modal-header no-print">
           <div className="actions">
@@ -42,8 +42,11 @@ export function SlipPreviewModal({ data, selectedIndex, settings, onClose, onSel
               Next <ChevronRight size={16} />
             </button>
           </div>
-          <strong>{slip.nama} - {selectedIndex + 1}/{data.length}</strong>
-          <button className="button button--ghost" type="button" onClick={onClose} aria-label="Tutup preview">
+          <strong className="modal-title" id="preview-modal-title">
+            {slip.nama}
+            <span>{selectedIndex + 1} dari {data.length}</span>
+          </strong>
+          <button className="button button--ghost modal-close" type="button" onClick={onClose} aria-label="Tutup preview">
             <X size={18} />
           </button>
         </div>

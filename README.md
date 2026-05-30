@@ -9,9 +9,10 @@ Aplikasi web untuk membuat slip gaji Griya Qur'an Tartiilaa dari file Excel. Apl
 - Preview slip gaji per pegawai.
 - Print semua slip dalam format A5.
 - Download satu slip sebagai PDF.
-- Download semua slip sebagai satu file PDF gabungan.
-- Pengaturan institusi, kota tanda tangan, bendahara, kampus, dan logo.
-- Template Excel tersedia di `public/template-slip-gaji.xlsx`.
+- Download semua slip sebagai ZIP berisi satu PDF per pegawai.
+- Tombol WhatsApp per pegawai dengan link PDF snapshot yang berlaku 30 hari.
+- Pengaturan institusi, kota tanda tangan, bendahara, kampus, logo, dan pesan WhatsApp.
+- Template Excel tersedia melalui `/api/template-slip-gaji`.
 
 ## Teknologi
 
@@ -62,7 +63,7 @@ tsc --noEmit
 ## Alur Penggunaan
 
 1. Buka halaman **Settings**.
-2. Isi data institusi, kota tanda tangan, nama bendahara, jabatan bendahara, kampus, dan logo.
+2. Isi data institusi, kota tanda tangan, nama bendahara, jabatan bendahara, kampus, logo, dan pesan WhatsApp.
 3. Simpan pengaturan.
 4. Kembali ke halaman utama.
 5. Upload file Excel sesuai template.
@@ -89,16 +90,20 @@ Data yang disimpan mencakup:
 - `jabatan_bendahara`
 - `kampus`
 - `logo_data_url`
+- `whatsapp_message`
 
 Saat user menyimpan halaman Settings, aplikasi menulis data ke `data/settings.json`. Saat aplikasi dibuka, data dibaca kembali dari file ini. Jika file belum ada atau gagal dibaca, aplikasi memakai default setting dari `lib/settings.ts`.
 
-Folder `data/` masuk `.gitignore`, jadi isi database lokal tidak ikut masuk commit. Untuk deployment, pastikan folder `data/` tetap persistent agar setting tidak hilang saat container atau server restart.
+Folder `data/` masuk `.gitignore`, jadi isi database lokal tidak ikut masuk commit. Untuk deployment, pastikan folder `data/` tetap persistent agar setting dan PDF snapshot WhatsApp tidak hilang saat container atau server restart.
 
 ## API Routes
 
+- `GET /api/template-slip-gaji` — membuat template Excel dengan kolom nomor HP.
 - `POST /api/parse-excel` — membaca dan validasi file Excel.
 - `POST /api/generate-pdf` — membuat PDF untuk satu slip.
-- `POST /api/generate-bulk-pdf` — membuat satu PDF gabungan untuk semua slip.
+- `POST /api/generate-bulk-pdf` — membuat ZIP berisi satu PDF per slip.
+- `POST /api/share-pdf` — membuat PDF snapshot untuk link WhatsApp 30 hari.
+- `GET /pdf/{id}` — membuka PDF snapshot dari link random.
 - `GET /api/settings` — membaca setting aplikasi.
 - `POST /api/settings` — menyimpan setting aplikasi ke `data/settings.json`.
 
@@ -108,8 +113,10 @@ Folder `data/` masuk `.gitignore`, jadi isi database lokal tidak ikut masuk comm
 app/                 Halaman dan API routes Next.js
 components/          Komponen UI dan slip preview/PDF
 lib/                 Parser, kalkulasi, format rupiah, settings, dan tipe data
-public/              Asset publik dan template Excel
+public/              Asset publik
+app/api/template-slip-gaji Template Excel dinamis dengan kolom phone_number
 data/settings.json   Database setting lokal aplikasi
+data/shared-pdfs/    PDF snapshot WhatsApp lokal, expired 30 hari
 ```
 
 ## Deployment

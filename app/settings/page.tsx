@@ -62,7 +62,18 @@ export default function SettingsPage() {
           <Field label="Jabatan Bendahara" value={settings.jabatan_bendahara} placeholder="Bendahara GQT" onChange={(value) => setSettings({ ...settings, jabatan_bendahara: value })} />
           <Field label="Kampus" value={settings.kampus} placeholder="Kampus GQT Salatiga" onChange={(value) => setSettings({ ...settings, kampus: value })} />
 
-          <div className="form-field">
+          <div className="form-field form-field--full">
+            <label>Pesan WhatsApp</label>
+            <textarea
+              value={settings.whatsapp_message}
+              placeholder="Assalamualaikum {nama}, slip gaji periode {periode} sudah tersedia. Link PDF: {pdf_url}."
+              onChange={(event) => setSettings({ ...settings, whatsapp_message: event.target.value })}
+              rows={4}
+            />
+            <small>Variabel: {'{nama}'}, {'{periode}'}, {'{periode_lengkap}'}, {'{institusi}'}, {'{total}'}, {'{pdf_url}'}.</small>
+          </div>
+
+          <div className="form-field form-field--full">
             <label>Logo Institusi</label>
             <input type="file" accept="image/png,image/jpeg,image/webp" onChange={handleLogoChange} />
             {settings.logo_data_url ? (
@@ -75,13 +86,13 @@ export default function SettingsPage() {
             )}
           </div>
 
-          <div className="actions">
+          <div className="actions form-field--full">
             <button className="button button--primary" type="submit">
               <Save size={16} /> Simpan Pengaturan
             </button>
           </div>
 
-          {saved ? <div className="alert alert--success">Pengaturan berhasil disimpan.</div> : null}
+          {saved ? <div className="alert alert--success form-field--full" aria-live="polite">Pengaturan berhasil disimpan.</div> : null}
         </form>
       </section>
     </div>

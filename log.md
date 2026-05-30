@@ -18,3 +18,7 @@
 [2026-05-21 13:05] [slip-gaji-tartila] Adjust preview signature spacing → Increased Bendahara GQT top spacing in slip preview
 [2026-05-21 13:08] [slip-gaji-tartila] Fix preview signature spacing CSS → Replaced ineffective Tailwind utility with custom slip-signature CSS gap
 [2026-05-25 10:38] [slip-gaji-tartila] Add README documentation → Created README with usage, commands, API routes, and data/settings.json database notes
+[2026-05-30 00:00] [slip-gaji-tartila] Add WhatsApp phone and ZIP PDFs → Added phone_number parsing, WhatsApp message settings/button, employee-first PDF filenames, and ZIP bulk export; typecheck/build not run because Bash permission denied
+[2026-05-30 00:00] [slip-gaji-tartila] Add WhatsApp button asset → Added public/whatsapp.svg and used it in employee list WhatsApp buttons; web asset lookup denied so SVG was created locally
+[2026-05-30 00:00] [slip-gaji-tartila] Redesign app chrome → Updated utilitarian navbar, workflow status, upload, employee table, settings form, and modal chrome; protected slip preview/PDF files unchanged; fixed Response body typing; lint and build passed
+[2026-05-30 00:00] [slip-gaji-tartila] Add shareable PDF links → Added 30-day PDF snapshot storage under data/shared-pdfs, /api/share-pdf, /pdf/{id}, and WhatsApp link generation; lint and build passed

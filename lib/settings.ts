@@ -8,6 +8,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   nama_bendahara: 'Tri Wahyuniati',
   jabatan_bendahara: 'Bendahara GQT',
   kampus: 'Kampus GQT Salatiga',
+  whatsapp_message: 'Assalamualaikum {nama}, slip gaji periode {periode} sudah tersedia. Link PDF: {pdf_url}. Link berlaku 30 hari. Silakan cek dan konfirmasi. Terima kasih.',
   logo_data_url: '',
 }
 
@@ -35,6 +36,7 @@ export function normalizeSettings(settings: Partial<AppSettings>): AppSettings {
     nama_bendahara: settings.nama_bendahara ?? DEFAULT_SETTINGS.nama_bendahara,
     jabatan_bendahara: settings.jabatan_bendahara ?? DEFAULT_SETTINGS.jabatan_bendahara,
     kampus: settings.kampus ?? DEFAULT_SETTINGS.kampus,
+    whatsapp_message: settings.whatsapp_message ?? DEFAULT_SETTINGS.whatsapp_message,
     logo_data_url: settings.logo_data_url ?? DEFAULT_SETTINGS.logo_data_url,
   }
 }

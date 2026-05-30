@@ -3,6 +3,7 @@ import type { SlipData } from './types'
 
 const REQUIRED_HEADERS = [
   'nama',
+  'phone_number',
   'periode',
   'periode_lengkap',
   'transport_per_datang',
@@ -54,6 +55,7 @@ export function parseExcelBuffer(buffer: Buffer): SlipData[] {
     return {
       no: index + 1,
       nama: stringValue(normalized.nama),
+      phone_number: stringValue(normalized.phone_number),
       periode: stringValue(normalized.periode),
       periode_lengkap: stringValue(normalized.periode_lengkap),
       transport_per_datang: numberValue(normalized.transport_per_datang, 'transport_per_datang', index),

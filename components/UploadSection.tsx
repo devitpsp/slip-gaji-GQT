@@ -24,20 +24,23 @@ export function UploadSection({ isLoading, error, onFile }: UploadSectionProps) 
       <div className="card__body stack">
         <div>
           <h2 className="card__title">Upload Excel</h2>
-          <p className="card__description">Gunakan file .xlsx atau .xls dengan 8 kolom wajib sesuai template.</p>
+          <p className="card__description">Gunakan file .xlsx atau .xls dengan 9 kolom wajib sesuai template.</p>
         </div>
 
         <label className="upload-zone" onDragOver={(event) => event.preventDefault()} onDrop={handleDrop}>
-          <Upload size={28} />
-          <div style={{ marginTop: 10, fontWeight: 700 }}>{isLoading ? 'Membaca file...' : 'Klik untuk upload file Excel'}</div>
-          <div style={{ marginTop: 4, color: 'var(--color-text-secondary)' }}>atau drag & drop file di sini</div>
+          <span className="upload-zone__icon">
+            <Upload size={22} />
+          </span>
+          <span className="upload-zone__title">{isLoading ? 'Membaca file...' : 'Klik untuk upload file Excel'}</span>
+          <span className="upload-zone__hint">atau drag & drop file di sini</span>
+          <span className="upload-zone__meta">Format: .xlsx atau .xls</span>
           <input type="file" accept=".xlsx,.xls" onChange={handleInput} disabled={isLoading} hidden />
         </label>
 
         {error ? <div className="alert alert--error">{error}</div> : null}
 
         <div className="actions">
-          <a className="button" href="/template-slip-gaji.xlsx" download>
+          <a className="button" href="/api/template-slip-gaji" download>
             <Download size={16} /> Download Template Slip Gaji
           </a>
         </div>
